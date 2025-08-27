@@ -1,0 +1,27 @@
+import numpy as np
+from gnuradio import gr
+
+
+class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
+    """Embedded Python Block example - a simple multiply const"""
+
+    def __init__(self, additionFlag=True):  # only default arguments here
+        gr.sync_block.__init__(
+            self,
+            name='e_Acum',   # will show up in GRC
+            in_sig=[np.float32],
+            out_sig=[np.float32]
+        )
+        # Estado acumulado
+        self.acumulated_value = 0.0
+        self.additionFlag = additionFlag
+    
+    def work(self, input_items, output_items):
+        x = input_items[0]  # Señal de entrada
+        y0 = output_items[0]  # Señal acumulada
+
+        for i in range(len(x)):
+            self.acumulated_value += x[i]  
+            y0[i] = self.acumulated_value 
+
+        return len(y0)

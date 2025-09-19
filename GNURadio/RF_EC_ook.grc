@@ -1191,3 +1191,4 @@ connections:
 
 metadata:
   file_format: 1
+  grc_version: v3.10.11.0-89-ga17f69e7

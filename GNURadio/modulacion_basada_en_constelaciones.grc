@@ -93,6 +93,18 @@ blocks:
     coordinate: [530, 16]
     rotation: 0
     state: enabled
+- name: fc
+  id: variable
+  parameters:
+    comment: ''
+    value: 2*Rs
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1176, 24.0]
+    rotation: 0
+    state: enabled
 - name: h
   id: variable
   parameters:
@@ -146,7 +158,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [772, 245]
+    coordinate: [864, 288.0]
     rotation: 0
     state: true
 - name: analog_random_source_x_0
@@ -184,7 +196,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [971, 304]
+    coordinate: [1096.0, 328]
     rotation: 270
     state: true
 - name: blocks_pack_k_bits_bb_0
@@ -242,6 +254,40 @@ blocks:
     coordinate: [576, 160.0]
     rotation: 0
     state: true
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\n\nclass blk(gr.sync_block):\n\
+      \    \"\"\"\n    Up-Converter en GNU Radio con salida real\n    \"\"\"\n\n \
+      \   def __init__(self, fc=100e3, samp_rate=1e6):\n        gr.sync_block.__init__(\n\
+      \            self,\n            name=\"up_converter_real\",\n            in_sig=[np.complex64],\
+      \  # entrada compleja\n            out_sig=[np.float32]    # salida real\n \
+      \       )\n        self.fc = fc\n        self.samp_rate = samp_rate\n      \
+      \  self.phase = 0\n        self.dt = 2 * np.pi * self.fc / self.samp_rate\n\n\
+      \    def work(self, input_items, output_items):\n        in0 = input_items[0]\n\
+      \        out = output_items[0]\n\n        # Generar portadora compleja\n   \
+      \     n = np.arange(len(in0))\n        carrier = np.exp(1j * (self.phase + self.dt\
+      \ * n))\n\n        # Mezclar se\xF1al de entrada con portadora y tomar solo\
+      \ la parte real\n        out[:] = np.real(in0 * carrier)\n\n        # Actualizar\
+      \ fase para continuidad\n        self.phase += self.dt * len(in0)\n        self.phase\
+      \ = np.mod(self.phase, 2*np.pi)\n\n        return len(out)\n\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    fc: fc
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+  states:
+    _io_cache: ('up_converter_real', 'blk', [('fc', '100000.0'), ('samp_rate', '1000000.0')],
+      [('0', 'complex', 1)], [('0', 'float', 1)], '\n    Up-Converter en GNU Radio
+      con salida real\n    ', ['fc', 'samp_rate'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 280.0]
+    rotation: 0
+    state: enabled
 - name: import_0
   id: import
   parameters:
@@ -363,7 +409,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [235, 425]
+    coordinate: [320, 512.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0
@@ -444,7 +490,88 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [449, 361]
+    coordinate: [464, 424.0]
+    rotation: 0
+    state: true
+- name: qtgui_freq_sink_x_0_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '0.05'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: float
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [568, 336.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -541,7 +668,104 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [237, 489]
+    coordinate: [320, 600.0]
+    rotation: 0
+    state: true
+- name: qtgui_time_sink_x_0_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 248.0]
     rotation: 0
     state: true
 - name: virtual_sink_0
@@ -554,7 +778,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [981, 404]
+    coordinate: [1080.0, 448]
     rotation: 270
     state: true
 - name: virtual_sink_0_0
@@ -567,7 +791,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1095, 285]
+    coordinate: [1184.0, 232]
     rotation: 270
     state: true
 - name: virtual_source_0
@@ -580,7 +804,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [66, 445]
+    coordinate: [144, 536.0]
     rotation: 0
     state: true
 - name: virtual_source_0_0
@@ -593,7 +817,20 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [70, 377]
+    coordinate: [144, 448.0]
+    rotation: 0
+    state: true
+- name: virtual_source_0_1
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: p1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [128, 280.0]
     rotation: 0
     state: true
 
@@ -604,11 +841,14 @@ connections:
 - [blocks_pack_k_bits_bb_0, '0', blocks_packed_to_unpacked_xx_0, '0']
 - [blocks_packed_to_unpacked_xx_0, '0', digital_chunks_to_symbols_xx_0, '0']
 - [digital_chunks_to_symbols_xx_0, '0', interp_fir_filter_xxx_0, '0']
+- [epy_block_0, '0', qtgui_freq_sink_x_0_0, '0']
+- [epy_block_0, '0', qtgui_time_sink_x_0_0, '0']
 - [interp_fir_filter_xxx_0, '0', blocks_add_xx_0, '1']
 - [interp_fir_filter_xxx_0, '0', virtual_sink_0_0, '0']
 - [virtual_source_0, '0', qtgui_const_sink_x_0, '0']
 - [virtual_source_0, '0', qtgui_time_sink_x_0, '0']
 - [virtual_source_0_0, '0', qtgui_freq_sink_x_0, '0']
+- [virtual_source_0_1, '0', epy_block_0, '0']
 
 metadata:
   file_format: 1
